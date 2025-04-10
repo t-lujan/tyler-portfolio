@@ -1,11 +1,6 @@
 <template>
   <div class="home">
-    <canvas
-      ref="pongCanvas"
-      class="pong-bg"
-      :class="{ disabled: isMobile }"
-    ></canvas>
-
+    <canvas ref="pongCanvas" class="pong-bg"></canvas>
     <div class="about">
       <p>
         I’m a junior dev focused on crafting clean, efficient, and interactive web experiences.
@@ -20,8 +15,6 @@ import { ref, onMounted } from 'vue'
 
 const pongCanvas = ref(null)
 let ctx
-
-const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
 const paddle = {
   width: 10,
@@ -45,14 +38,8 @@ const resizeCanvas = () => {
   canvas.height = window.innerHeight
   paddle.leftY = canvas.height / 2 - paddle.height / 2
   paddle.rightY = canvas.height / 2 - paddle.height / 2
-  resetBall(canvas)
-}
-
-const resetBall = (canvas) => {
   ball.x = canvas.width / 2
   ball.y = canvas.height / 2
-  ball.vx = 3 * (Math.random() > 0.5 ? 1 : -1)
-  ball.vy = 2 * (Math.random() > 0.5 ? 1 : -1)
 }
 
 const handleMouseMove = (e) => {
@@ -70,16 +57,13 @@ const draw = () => {
   const isDark = document.body.classList.contains('dark')
   const color = isDark ? 'white' : 'black'
 
-  // Ball movement
   ball.x += ball.vx
   ball.y += ball.vy
 
-  // Wall bounce
   if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) {
     ball.vy *= -1
   }
 
-  // Left paddle collision
   if (
     ball.x - ball.radius <= 10 + paddle.width &&
     ball.y >= paddle.leftY &&
@@ -88,7 +72,6 @@ const draw = () => {
     ball.vx *= -1
   }
 
-  // Right paddle collision
   const rightX = canvas.width - paddle.width - 10
   if (
     ball.x + ball.radius >= rightX &&
@@ -98,23 +81,22 @@ const draw = () => {
     ball.vx *= -1
   }
 
-  // Reset if out of bounds
   if (ball.x < 0 || ball.x > canvas.width) {
-    resetBall(canvas)
+    ball.x = canvas.width / 2
+    ball.y = canvas.height / 2
   }
 
-  // AI tracking
   const aiCenter = paddle.rightY + paddle.height / 2
   if (ball.y < aiCenter - 10) paddle.rightY -= paddle.speed
   if (ball.y > aiCenter + 10) paddle.rightY += paddle.speed
   paddle.rightY = Math.max(0, Math.min(canvas.height - paddle.height, paddle.rightY))
 
-  // Draw
   ctx.fillStyle = color
   ctx.beginPath()
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
   ctx.fill()
 
+  ctx.fillStyle = color
   ctx.fillRect(10, paddle.leftY, paddle.width, paddle.height)
   ctx.fillRect(rightX, paddle.rightY, paddle.width, paddle.height)
 }
@@ -125,7 +107,6 @@ const animate = () => {
 }
 
 onMounted(() => {
-  if (isMobile) return
   const canvas = pongCanvas.value
   ctx = canvas.getContext('2d')
   resizeCanvas()
@@ -140,18 +121,26 @@ onMounted(() => {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
 }
 
 .about {
   position: absolute;
-  right: 3rem;
-  bottom: 3rem;
-  max-width: 300px;
+  right: 2rem;
+  bottom: 2rem;
+  max-width: 280px;
   font-size: 0.9rem;
   text-align: right;
   z-index: 2;
   line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .about {
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 0.8rem;
+    max-width: 80%;
+  }
 }
 
 .pong-bg {
@@ -163,9 +152,5 @@ onMounted(() => {
   height: 100vh;
   background: radial-gradient(circle, #ccc 0%, transparent 100%);
   pointer-events: none;
-}
-
-.pong-bg.disabled {
-  display: none;
 }
 </style>
