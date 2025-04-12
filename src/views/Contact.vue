@@ -1,26 +1,33 @@
 <template>
-  <div class="contact-page">
-    <h1>Contact Me</h1>
-    <form class="contact-form" action="mailto:tyler@example.com" method="POST" enctype="text/plain">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Your Email" required />
-      <textarea name="message" placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
+  <div class="page-container">
+    <div class="content">
+      <h1>Contact Me</h1>
+      <form @submit.prevent class="contact-form">
+        <input type="text" placeholder="Name" required />
+        <input type="email" placeholder="Email" required />
+        <textarea placeholder="Message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.contact-page {
+.page-container {
+  padding: 2rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.content {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 2rem;
   font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .contact-form {
@@ -29,46 +36,41 @@ h1 {
   gap: 1rem;
 }
 
-input,
-textarea {
+.contact-form input,
+.contact-form textarea {
   padding: 0.75rem;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 6px;
 }
 
-textarea {
-  resize: vertical;
+.contact-form textarea {
   min-height: 120px;
+  resize: vertical;
 }
 
-button {
+.contact-form button {
   padding: 0.75rem;
-  background: black;
+  background-color: black;
   color: white;
-  border: none;
-  border-radius: 4px;
   font-weight: bold;
-  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 @media (max-width: 768px) {
-  .contact-page {
+  .page-container {
     padding: 1rem;
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
-  input,
-  textarea {
+  .contact-form input,
+  .contact-form textarea {
     font-size: 0.9rem;
-  }
-
-  button {
-    font-size: 0.95rem;
   }
 }
 </style>
