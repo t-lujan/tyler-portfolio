@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <canvas ref="pongCanvas" class="pong-bg" v-show="!isMobile"></canvas>
+    <canvas v-show="!isMobile" ref="pongCanvas" class="pong-bg"></canvas>
+
     <div class="about">
       <p>
         I’m a junior dev focused on crafting clean, efficient, and interactive web experiences.
@@ -14,9 +15,9 @@
 import { ref, onMounted } from 'vue'
 
 const pongCanvas = ref(null)
-const isMobile = window.innerWidth <= 768
-let ctx
+const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
+let ctx, animationId
 const paddle = { width: 10, height: 80, leftY: 0, rightY: 0, speed: 4 }
 const ball = { x: 0, y: 0, radius: 6, vx: 3, vy: 2 }
 
@@ -30,14 +31,6 @@ const resizeCanvas = () => {
   ball.y = canvas.height / 2
 }
 
-const handleMouseMove = (e) => {
-  const bounds = pongCanvas.value.getBoundingClientRect()
-  const x = e.clientX - bounds.left
-  if (x < bounds.width / 2) {
-    paddle.leftY = e.clientY - bounds.top - paddle.height / 2
-  }
-}
-
 const draw = () => {
   const canvas = pongCanvas.value
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -45,33 +38,27 @@ const draw = () => {
   const isDark = document.body.classList.contains('dark')
   const color = isDark ? 'white' : 'black'
 
+  // Ball movement
   ball.x += ball.vx
   ball.y += ball.vy
-
-  if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) {
-    ball.vy *= -1
-  }
+  if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= canvas.height) ball.vy *= -1
 
   const rightX = canvas.width - paddle.width - 10
-
   if (
     ball.x - ball.radius <= 10 + paddle.width &&
     ball.y >= paddle.leftY &&
     ball.y <= paddle.leftY + paddle.height
-  ) {
-    ball.vx *= -1
-  }
+  ) ball.vx *= -1
 
   if (
     ball.x + ball.radius >= rightX &&
     ball.y >= paddle.rightY &&
     ball.y <= paddle.rightY + paddle.height
-  ) {
-    ball.vx *= -1
-  }
+  ) ball.vx *= -1
 
   if (ball.x < 0 || ball.x > canvas.width) {
-    resetBall(canvas)
+    ball.x = canvas.width / 2
+    ball.y = canvas.height / 2
   }
 
   const aiCenter = paddle.rightY + paddle.height / 2
@@ -79,25 +66,18 @@ const draw = () => {
   if (ball.y > aiCenter + 10) paddle.rightY += paddle.speed
   paddle.rightY = Math.max(0, Math.min(canvas.height - paddle.height, paddle.rightY))
 
+  // Draw paddles and ball
   ctx.fillStyle = color
+  ctx.fillRect(10, paddle.leftY, paddle.width, paddle.height)
+  ctx.fillRect(rightX, paddle.rightY, paddle.width, paddle.height)
   ctx.beginPath()
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
   ctx.fill()
-
-  ctx.fillRect(10, paddle.leftY, paddle.width, paddle.height)
-  ctx.fillRect(rightX, paddle.rightY, paddle.width, paddle.height)
-}
-
-const resetBall = (canvas) => {
-  ball.x = canvas.width / 2
-  ball.y = canvas.height / 2
-  ball.vx = 3 * (Math.random() > 0.5 ? 1 : -1)
-  ball.vy = 2 * (Math.random() > 0.5 ? 1 : -1)
 }
 
 const animate = () => {
   draw()
-  requestAnimationFrame(animate)
+  animationId = requestAnimationFrame(animate)
 }
 
 onMounted(() => {
@@ -107,7 +87,6 @@ onMounted(() => {
     resizeCanvas()
     animate()
     window.addEventListener('resize', resizeCanvas)
-    window.addEventListener('mousemove', handleMouseMove)
   }
 })
 </script>
@@ -115,19 +94,8 @@ onMounted(() => {
 <style scoped>
 .home {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
-}
-
-.about {
-  position: absolute;
-  right: 2rem;
-  bottom: 2rem;
-  max-width: 300px;
-  font-size: 0.9rem;
-  text-align: right;
-  z-index: 2;
-  line-height: 1.5;
 }
 
 .pong-bg {
@@ -137,16 +105,25 @@ onMounted(() => {
   z-index: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle, #ccc 0%, transparent 100%);
-  pointer-events: none;
+}
+
+.about {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  max-width: 280px;
+  font-size: 0.9rem;
+  text-align: right;
+  z-index: 2;
+  line-height: 1.4;
 }
 
 @media (max-width: 768px) {
   .about {
+    font-size: 0.8rem;
+    max-width: 85%;
     right: 1rem;
     bottom: 1rem;
-    font-size: 0.8rem;
-    max-width: 90%;
   }
 }
 </style>

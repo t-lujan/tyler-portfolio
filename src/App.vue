@@ -1,21 +1,17 @@
 <template>
-  <div :class="{ dark: isDark }">
-    <NavBar :isDark="isDark" @toggleDark="isDark = !isDark" />
-    <RouterView />
+  <div>
+    <Navbar />
+    <router-view />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import NavBar from './components/NavBar.vue'
-
-const isDark = ref(true)
+import Navbar from './components/Navbar.vue'
 </script>
 
 <style>
-body, html {
+body {
   margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
 }
 </style>

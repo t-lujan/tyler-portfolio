@@ -1,62 +1,65 @@
 <template>
     <header class="navbar">
-      <div class="logo">Tyler Lujan</div>
-      <button class="hamburger" @click="showMenu = !showMenu">
-        ☰
-      </button>
-      <nav :class="{ open: showMenu }">
-        <RouterLink to="/" @click="showMenu = false">Home</RouterLink>
-        <RouterLink to="/projects" @click="showMenu = false">Projects</RouterLink>
-        <RouterLink to="/contact" @click="showMenu = false">Contact</RouterLink>
-        <label class="theme-toggle">
-          <input type="checkbox" v-model="isDark" @change="$emit('toggleDark')" />
-          <span>{{ isDark ? 'DARK' : 'LIGHT' }}</span>
-        </label>
+      <div class="brand">Tyler Lujan</div>
+      <div class="subtitle">Junior Front-End Developer</div>
+      <button class="hamburger" @click="isOpen = !isOpen">☰</button>
+      <nav :class="{ open: isOpen }">
+        <RouterLink to="/" @click="isOpen = false">Home</RouterLink>
+        <RouterLink to="/projects" @click="isOpen = false">Projects</RouterLink>
+        <RouterLink to="/contact" @click="isOpen = false">Contact</RouterLink>
       </nav>
     </header>
   </template>
   
   <script setup>
   import { ref } from 'vue'
-  const props = defineProps(['isDark'])
-  const showMenu = ref(false)
+  const isOpen = ref(false)
   </script>
   
   <style scoped>
   .navbar {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     padding: 1rem;
   }
-  .logo {
+  
+  .brand {
+    font-size: 1.5rem;
     font-weight: bold;
-    font-size: 1.4rem;
   }
-  nav {
-    display: none;
+  
+  .subtitle {
+    font-size: 0.9rem;
+    color: gray;
   }
-  nav.open {
-    display: flex;
-    flex-direction: column;
-  }
+  
   .hamburger {
-    font-size: 1.6rem;
+    display: none;
+    font-size: 1.5rem;
     background: none;
     border: none;
   }
-  .theme-toggle {
-    margin-top: 1rem;
-    font-size: 0.8rem;
+  
+  nav {
+    display: flex;
+    gap: 1rem;
   }
-  @media(min-width: 768px) {
+  
+  @media (max-width: 768px) {
     .hamburger {
+      display: block;
+    }
+  
+    nav {
+      flex-direction: column;
+      width: 100%;
       display: none;
     }
-    nav {
-      display: flex !important;
-      gap: 1rem;
-      flex-direction: row;
+  
+    nav.open {
+      display: flex;
     }
   }
   </style>
