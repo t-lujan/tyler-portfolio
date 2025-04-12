@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <canvas ref="pongCanvas" class="pong-bg"></canvas>
+    <canvas ref="pongCanvas" class="pong-bg" v-show="!isMobile"></canvas>
     <div class="about">
       <p>
         I’m a junior dev focused on crafting clean, efficient, and interactive web experiences.
@@ -14,23 +14,11 @@
 import { ref, onMounted } from 'vue'
 
 const pongCanvas = ref(null)
+const isMobile = window.innerWidth <= 768
 let ctx
 
-const paddle = {
-  width: 10,
-  height: 80,
-  leftY: 0,
-  rightY: 0,
-  speed: 4
-}
-
-const ball = {
-  x: 0,
-  y: 0,
-  radius: 6,
-  vx: 3,
-  vy: 2
-}
+const paddle = { width: 10, height: 80, leftY: 0, rightY: 0, speed: 4 }
+const ball = { x: 0, y: 0, radius: 6, vx: 3, vy: 2 }
 
 const resizeCanvas = () => {
   const canvas = pongCanvas.value
@@ -64,6 +52,8 @@ const draw = () => {
     ball.vy *= -1
   }
 
+  const rightX = canvas.width - paddle.width - 10
+
   if (
     ball.x - ball.radius <= 10 + paddle.width &&
     ball.y >= paddle.leftY &&
@@ -72,7 +62,6 @@ const draw = () => {
     ball.vx *= -1
   }
 
-  const rightX = canvas.width - paddle.width - 10
   if (
     ball.x + ball.radius >= rightX &&
     ball.y >= paddle.rightY &&
@@ -82,8 +71,7 @@ const draw = () => {
   }
 
   if (ball.x < 0 || ball.x > canvas.width) {
-    ball.x = canvas.width / 2
-    ball.y = canvas.height / 2
+    resetBall(canvas)
   }
 
   const aiCenter = paddle.rightY + paddle.height / 2
@@ -96,9 +84,15 @@ const draw = () => {
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
   ctx.fill()
 
-  ctx.fillStyle = color
   ctx.fillRect(10, paddle.leftY, paddle.width, paddle.height)
   ctx.fillRect(rightX, paddle.rightY, paddle.width, paddle.height)
+}
+
+const resetBall = (canvas) => {
+  ball.x = canvas.width / 2
+  ball.y = canvas.height / 2
+  ball.vx = 3 * (Math.random() > 0.5 ? 1 : -1)
+  ball.vy = 2 * (Math.random() > 0.5 ? 1 : -1)
 }
 
 const animate = () => {
@@ -107,12 +101,14 @@ const animate = () => {
 }
 
 onMounted(() => {
-  const canvas = pongCanvas.value
-  ctx = canvas.getContext('2d')
-  resizeCanvas()
-  animate()
-  window.addEventListener('resize', resizeCanvas)
-  window.addEventListener('mousemove', handleMouseMove)
+  if (!isMobile) {
+    const canvas = pongCanvas.value
+    ctx = canvas.getContext('2d')
+    resizeCanvas()
+    animate()
+    window.addEventListener('resize', resizeCanvas)
+    window.addEventListener('mousemove', handleMouseMove)
+  }
 })
 </script>
 
@@ -127,20 +123,11 @@ onMounted(() => {
   position: absolute;
   right: 2rem;
   bottom: 2rem;
-  max-width: 280px;
+  max-width: 300px;
   font-size: 0.9rem;
   text-align: right;
   z-index: 2;
   line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-  .about {
-    right: 1rem;
-    bottom: 1rem;
-    font-size: 0.8rem;
-    max-width: 80%;
-  }
 }
 
 .pong-bg {
@@ -152,5 +139,14 @@ onMounted(() => {
   height: 100vh;
   background: radial-gradient(circle, #ccc 0%, transparent 100%);
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .about {
+    right: 1rem;
+    bottom: 1rem;
+    font-size: 0.8rem;
+    max-width: 90%;
+  }
 }
 </style>
