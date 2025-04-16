@@ -1,6 +1,6 @@
 <template>
   <div :class="theme" class="app">
-    <div class="grid">
+    <div :class="['grid', { 'mobile-grid': isMobile && route.name !== 'Home' }]">
       <div class="left">
         <h1>Tyler Lujan</h1>
         <p class="role">Junior Front-End Developer and Technical Support Specialist</p>
@@ -28,6 +28,9 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const isDark = ref(false)
 const theme = ref('light')
@@ -35,6 +38,8 @@ watch(isDark, () => {
   theme.value = isDark.value ? 'dark' : 'light'
   document.body.className = theme.value
 })
+
+const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
 </script>
 
 <style scoped>
@@ -47,14 +52,11 @@ html, body {
   box-sizing: border-box;
 }
 
-
 .app {
-  font-family: 'Inter', sans-serif;
-
+  font-family: 'Helvetica Neue', sans-serif;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  font-family: 'Helvetica Neue', sans-serif;
   display: flex;
 }
 
@@ -130,34 +132,43 @@ nav a:hover::after {
   width: 100%;
 }
 
-
 .theme-toggle {
   position: absolute;
   bottom: 2rem;
   left: 2rem;
   font-size: 0.8rem;
 }
+
+/* ✅ Mobile layout fix ONLY for Projects and Contact */
 @media (max-width: 768px) {
-  .grid {
-    display: block;
+  .mobile-grid {
+    display: flex;
+    flex-direction: column;
   }
 
-  .left {
+  .mobile-grid .left {
+    width: 100%;
+    padding: 1.5rem 1.5rem 0 1.5rem;
+    text-align: center;
+  }
+
+  .mobile-grid .left nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .mobile-grid .right {
     width: 100%;
     padding: 1.5rem;
-  }
-
-  .right {
-    width: 100%;
-    padding: 0 1.5rem;
     overflow: visible;
   }
 
-  .theme-toggle {
+  .mobile-grid .theme-toggle {
     position: static;
     margin-top: 1rem;
-    text-align: left;
+    text-align: center;
   }
 }
-
 </style>
