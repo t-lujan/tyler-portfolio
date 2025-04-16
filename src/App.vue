@@ -139,36 +139,25 @@ nav a:hover::after {
 }
 @media (max-width: 768px) {
   .grid {
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
 
   .left {
     width: 100%;
-    padding: 1.5rem 1.5rem 0 1.5rem;
-    text-align: center;
-  }
-
-  .left nav ul {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 0;
+    padding: 1.5rem;
   }
 
   .right {
     width: 100%;
-    padding: 1.5rem;
+    padding: 0 1.5rem;
     overflow: visible;
   }
 
   .theme-toggle {
     position: static;
     margin-top: 1rem;
-    text-align: center;
+    text-align: left;
   }
 }
-
-
 
 </style>
