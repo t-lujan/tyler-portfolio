@@ -1,19 +1,27 @@
 <template>
   <div class="home">
-    <!-- Disable canvas on mobile -->
-    <canvas
-      v-if="!isMobile"
-      ref="pongCanvas"
-      class="pong-bg"
-    ></canvas>
+    <!-- Desktop: Pong canvas -->
+    <canvas v-if="!isMobile" ref="pongCanvas" class="pong-bg"></canvas>
 
-    <div class="about">
+    <!-- Desktop: Full about text -->
+    <div v-if="!isMobile" class="about">
       <p>
         I’m a junior dev focused on crafting clean, efficient, and interactive web experiences.
-        My passion is building thoughtful UI/UX with Vue.js, JavaScript, and modern front-end tools. Google Ads Search Certified.
-        I’m constantly learning and exploring new technologies to improve my skills. 
+        My passion is building thoughtful UI/UX with Vue.js, JavaScript, and modern front-end tools.
+        Google Ads Search Certified. I’m constantly learning and exploring new technologies to improve my skills. 
         When I’m not coding, I enjoy hanging out with my wife and my 1 year old daughter, playing games, and playing golf.
       </p>
+    </div>
+
+    <!-- Mobile: Dot & Popup -->
+    <div v-if="isMobile">
+      <div class="about-dot" @click="showAbout = true"></div>
+      <div v-if="showAbout" class="about-popup">
+        <button class="close-btn" @click="showAbout = false">×</button>
+        <p>
+          Junior dev. Vue.js. Google Ads Certified. Always learning. Family man. Gamer. Golfer.
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -24,8 +32,10 @@ import { ref, onMounted } from 'vue'
 const pongCanvas = ref(null)
 let ctx
 
-const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) // better mobile detection
+const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+const showAbout = ref(false)
 
+// Pong paddles and ball
 const paddle = {
   width: 10,
   height: 80,
@@ -52,7 +62,6 @@ const resizeCanvas = () => {
 
   paddle.leftY = canvas.height / 2 - paddle.height / 2
   paddle.rightY = canvas.height / 2 - paddle.height / 2
-
   rightX = canvas.width - paddle.width - 10
   resetBall(canvas)
 }
@@ -126,7 +135,7 @@ const animate = () => {
 }
 
 onMounted(() => {
-  if (isMobile) return // ✅ HARD SKIP PONG INIT
+  if (isMobile) return
   const canvas = pongCanvas.value
   ctx = canvas.getContext('2d')
   resizeCanvas()
@@ -157,20 +166,40 @@ onMounted(() => {
   line-height: 1.5;
 }
 
-/* 🔧 Mobile-specific fix */
-@media (max-width: 768px) {
-  .about {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    left: 1.5rem;
-    text-align: right;
-    max-width: unset;
-    font-size: 0.95rem;
-    padding: 0;
-    line-height: 1.5;
-    z-index: 2;
-  }
+.about-dot {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: black;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.about-popup {
+  position: fixed;
+  bottom: 4rem;
+  right: 1rem;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  width: 250px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.about-popup .close-btn {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .pong-bg {
