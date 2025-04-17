@@ -19,6 +19,25 @@
 </script>
 
 <style scoped>
+@media (max-width: 768px) {
+  .projects-page {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .project-card img {
+    height: auto;
+    max-height: 160px;
+    object-fit: cover;
+  }
+}
+
 .projects-page {
   padding: 3rem 4rem;
   min-height: 100vh;
