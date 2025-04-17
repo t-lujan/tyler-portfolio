@@ -43,21 +43,23 @@ const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
 </script>
 
 <style scoped>
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow-x: hidden; /* 🔧 prevent horizontal scroll */
   box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 .app {
   font-family: 'Helvetica Neue', sans-serif;
   height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
-  overflow: hidden;
 }
 
 .dark {
@@ -86,20 +88,22 @@ html, body {
   height: 100%;
 }
 
+/* ✂ header styles */
 h1 {
   font-weight: 600;
-  letter-spacing: -0.5px;
   font-size: 2rem;
   margin-bottom: 0.2rem;
+  letter-spacing: -0.5px;
 }
 
 .role {
   font-weight: 300;
   font-size: 0.85rem;
-  letter-spacing: 0.3px;
   color: #777;
+  letter-spacing: 0.3px;
 }
 
+/* ✂ nav styles */
 nav ul {
   list-style: none;
   padding: 0;
@@ -114,8 +118,8 @@ nav a {
   text-decoration: none;
   font-weight: 500;
   color: inherit;
-  transition: color 0.3s ease;
   position: relative;
+  transition: color 0.3s ease;
 }
 
 nav a::after {
@@ -123,8 +127,8 @@ nav a::after {
   position: absolute;
   left: 0;
   bottom: -4px;
-  height: 1px;
   width: 0;
+  height: 1px;
   background-color: currentColor;
   transition: width 0.3s ease;
 }
@@ -140,18 +144,19 @@ nav a:hover::after {
   font-size: 0.8rem;
 }
 
-/* ✅ Mobile layout fixes ONLY for Projects + Contact */
+
+/* ✅ MOBILE FIXES */
 @media (max-width: 768px) {
   .mobile-grid {
     display: flex;
     flex-direction: column;
+    width: 100%;
     overflow-x: hidden;
-    overflow-y: auto;
   }
 
   .mobile-grid .left {
     width: 100%;
-    padding: 1.5rem 1.5rem 0;
+    padding: 1.5rem;
     text-align: center;
   }
 
@@ -160,13 +165,13 @@ nav a:hover::after {
     justify-content: center;
     gap: 1.5rem;
     padding: 0;
+    flex-wrap: wrap;
   }
 
   .mobile-grid .right {
     width: 100%;
-    padding: 1.5rem;
-    overflow-y: auto;
-    overflow-x: hidden;
+    padding: 1rem;
+    overflow: visible;
   }
 
   .mobile-grid .theme-toggle {
