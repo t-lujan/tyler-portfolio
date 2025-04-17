@@ -4,7 +4,7 @@
 
     <div class="projects-grid">
       <div class="project-card" v-for="n in 4" :key="n">
-        <img :src="`https://via.placeholder.com/280x160?text=Project+${n}`" :alt="`Project ${n}`" />
+        <img :src="`https://via.placeholder.com/300x200?text=Project+${n}`" :alt="`Project ${n}`" />
         <div class="info">
           <h2>Project {{ n }}</h2>
           <p>This is a placeholder description for Project {{ n }}.</p>
@@ -15,36 +15,17 @@
 </template>
 
 <script setup>
-// no JS needed
+// static content, no logic needed
 </script>
 
 <style scoped>
-@media (max-width: 768px) {
-  .projects-page {
-    padding: 1.5rem;
-    overflow-y: auto;
-    max-height: 100vh;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .project-card img {
-    height: auto;
-    max-height: 160px;
-    object-fit: cover;
-  }
-}
-
 .projects-page {
   padding: 3rem 4rem;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   color: inherit;
   box-sizing: border-box;
-  overflow-y: auto; /* Allow scrolling */
+  overflow-x: hidden; /* 👈 Fix right-side overflow */
 }
 
 h1 {
@@ -94,33 +75,31 @@ p {
   color: gray;
 }
 
-/* MOBILE ONLY */
+/* ✅ MOBILE FIXES */
 @media (max-width: 768px) {
   .projects-page {
     padding: 1rem;
     overflow-y: auto;
-  }
-
-  h1 {
-    font-size: 2rem;
+    height: auto;
   }
 
   .projects-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .project-card img {
-    max-width: 100%;
-    height: auto;
+    max-height: 160px;
+    object-fit: cover;
   }
 
-  .project-card {
-    padding: 0.5rem;
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
   }
 
   h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   p {
