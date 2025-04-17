@@ -3,7 +3,11 @@
     <div :class="['grid', { 'mobile-grid': isMobile && route.name !== 'Home' }]">
       <div class="left">
         <h1>Tyler Lujan</h1>
-        <p class="role">Junior Front-End Developer and Technical Support Specialist</p>
+        <p class="role">
+          <span>Junior Front-End Developer</span><br />
+          <span>Technical Support Specialist</span>
+        </p>
+        
         <nav>
           <ul>
             <li><router-link to="/">Home</router-link></li>
@@ -147,6 +151,11 @@ nav a:hover::after {
 
 /* ✅ MOBILE FIXES */
 @media (max-width: 768px) {
+
+  .role {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
   .mobile-grid {
     display: flex;
     flex-direction: column;
