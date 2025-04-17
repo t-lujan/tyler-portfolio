@@ -20,13 +20,14 @@
 
 <style scoped>
 .projects-page {
-  padding: 3rem 4rem;
+  padding: 2rem 1rem;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   color: inherit;
   box-sizing: border-box;
-  overflow-x: hidden; /* 👈 Fix right-side overflow */
+  overflow-x: hidden;
 }
+
 
 h1 {
   font-weight: 600;
@@ -77,21 +78,21 @@ p {
 
 /* ✅ MOBILE FIXES */
 @media (max-width: 768px) {
-  .projects-page {
-    padding: 1rem;
-    overflow-y: auto;
-    height: auto;
-  }
-
   .projects-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* stack projects */
     gap: 1rem;
   }
 
   .project-card img {
-    max-height: 160px;
-    object-fit: cover;
+    height: auto;
+    max-width: 100%;
   }
+
+  .projects-page {
+    padding: 1rem;
+    overflow-x: hidden; /* extra precaution */
+  }
+
 
   h1 {
     font-size: 2rem;
