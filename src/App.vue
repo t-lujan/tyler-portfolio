@@ -46,18 +46,18 @@ const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .app {
   font-family: 'Helvetica Neue', sans-serif;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
   display: flex;
+  overflow: hidden;
 }
 
 .dark {
@@ -103,6 +103,7 @@ h1 {
 nav ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 nav li {
@@ -139,16 +140,18 @@ nav a:hover::after {
   font-size: 0.8rem;
 }
 
-/* ✅ Mobile layout fix ONLY for Projects and Contact */
+/* ✅ Mobile layout fixes ONLY for Projects + Contact */
 @media (max-width: 768px) {
   .mobile-grid {
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .mobile-grid .left {
     width: 100%;
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 1.5rem 1.5rem 0;
     text-align: center;
   }
 
@@ -162,7 +165,8 @@ nav a:hover::after {
   .mobile-grid .right {
     width: 100%;
     padding: 1.5rem;
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .mobile-grid .theme-toggle {
