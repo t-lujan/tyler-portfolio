@@ -17,16 +17,23 @@
           </ul>
         </nav>
 
-        <!-- MOBILE-ONLY THEME TOGGLE -->
-        <div
-          v-if="isMobile"
-          :class="['theme-toggle', { 'bottom-left': isHomePage, 'bottom-flow': !isHomePage }]"
-        >
-          <label>
-            <input type="checkbox" v-model="isDark" />
-            {{ isDark ? 'DARK' : 'LIGHT' }}
-          </label>
-        </div>
+       <!-- THEME TOGGLE (works on desktop + mobile now) -->
+<div
+:class="[
+  'theme-toggle',
+  { 
+    'bottom-left': isMobile && isHomePage,
+    'bottom-flow': isMobile && !isHomePage,
+    'desktop-fixed': !isMobile
+  }
+]"
+>
+<label>
+  <input type="checkbox" v-model="isDark" />
+  {{ isDark ? 'DARK' : 'LIGHT' }}
+</label>
+</div>
+
       </div>
 
       <!-- RIGHT CONTENT PANE -->
@@ -204,5 +211,13 @@ nav a:hover::after {
     text-align: center;
     font-size: 0.8rem;
   }
+  /* DESKTOP SIDEBAR TOGGLE */
+.theme-toggle.desktop-fixed {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  font-size: 0.8rem;
+}
+
 }
 </style>
