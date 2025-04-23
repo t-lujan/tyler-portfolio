@@ -211,9 +211,20 @@ nav a:hover::after {
     overflow: visible; /* allow page scrolling */
   }
 
-  .mobile-grid .theme-toggle {
-    position: static;
-    margin-top: 1rem;
+  .mobile-grid {
+    min-height: 100vh; /* full height to anchor toggle at bottom */
+    position: relative;
+    padding-bottom: 4rem; /* space for toggle */
   }
+  
+  .mobile-grid .theme-toggle {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  
 }
 </style>
