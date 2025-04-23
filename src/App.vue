@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <div :class="['grid', { 'mobile-grid': isMobile && route.name !== 'Home' }]">
-      <!-- ───────────── LEFT (sidebar / header) ───────────── -->
+      <!-- ───────────── LEFT SIDEBAR / HEADER ───────────── -->
       <div class="left">
         <h1>Tyler Lujan</h1>
         <p class="role">
@@ -17,7 +17,8 @@
           </ul>
         </nav>
 
-        <div class="theme-toggle">
+        <!-- THEME TOGGLE (conditionally styled) -->
+        <div :class="['theme-toggle', { 'bottom-left': isHomePage, 'bottom-flow': !isHomePage }]">
           <label>
             <input type="checkbox" v-model="isDark" />
             {{ isDark ? 'DARK' : 'LIGHT' }}
@@ -25,7 +26,7 @@
         </div>
       </div>
 
-      <!-- ───────────── RIGHT (page outlet) ───────────── -->
+      <!-- ───────────── RIGHT PANE (VIEW OUTLET) ───────────── -->
       <div class="right">
         <router-view />
       </div>
@@ -34,20 +35,16 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-/* ── routing ── */
 const route = useRoute()
 
-/* ── dark / light toggle ── */
 const isDark = ref(false)
 watch(isDark, () => {
-  // preserve any existing body classes
   document.body.classList.toggle('dark', isDark.value)
 })
 
-/* ── mobile detection (live) ── */
 const isMobile = ref(false)
 function checkMobile () {
   isMobile.value =
@@ -60,28 +57,26 @@ onMounted(() => {
   window.addEventListener('resize', checkMobile)
 })
 onBeforeUnmount(() => window.removeEventListener('resize', checkMobile))
+
+const isHomePage = computed(() => route.name === 'Home')
 </script>
 
 <style scoped>
 /* ═══════════════════════════════════════════════════════ */
-/*  GLOBAL / RESET  */
+/* RESET + UNIVERSAL */
 /* ═══════════════════════════════════════════════════════ */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow-x: hidden;   /* stop rogue horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* ═══════════════════════════════════════════════════════ */
-/*  APP WRAPPER  */
-/* ═══════════════════════════════════════════════════════ */
 .app {
   font-family: 'Helvetica Neue', sans-serif;
   width: 100%;
@@ -90,31 +85,17 @@ body {
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: white;
-  color: black;
 }
 
-body.dark .app {
-  background-color: #121212;
-  color: #f1f1f1;
-}
-
-
-
-/* ═══════════════════════════════════════════════════════ */
-/*  GRID LAYOUT  */
-/* ═══════════════════════════════════════════════════════ */
 .grid {
   display: grid;
-  grid-template-columns: 300px 1fr; /* desktop two-col */
+  grid-template-columns: 300px 1fr;
   width: 100%;
   max-width: 1280px;
   height: 100%;
   margin: 0 auto;
 }
 
-/* LEFT SIDEBAR / HEADER */
 .left {
   display: flex;
   flex-direction: column;
@@ -123,14 +104,13 @@ body.dark .app {
   position: relative;
 }
 
-/* RIGHT CONTENT PANE */
 .right {
   position: relative;
   overflow: hidden;
   height: 100%;
 }
 
-/* ─── typography ─── */
+/* ─── Typography ─── */
 h1 {
   font-weight: 600;
   font-size: 2rem;
@@ -145,7 +125,7 @@ h1 {
   letter-spacing: 0.3px;
 }
 
-/* ─── nav ─── */
+/* ─── Nav ─── */
 nav ul {
   list-style: none;
   padding: 0;
@@ -179,19 +159,30 @@ nav a:hover::after {
   width: 100%;
 }
 
-/* ─── theme toggle ─── */
-.theme-toggle {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
+/* ═══════════════════════════════════════════════════════ */
+/* THEME TOGGLE: Conditional Style per Page */
+/* ═══════════════════════════════════════════════════════ */
+
+/* Fixed bottom-left for Home */
+.theme-toggle.bottom-left {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 0.8rem;
+  z-index: 10;
+}
+
+/* Scrolls with content on other pages */
+.theme-toggle.bottom-flow {
+  margin-top: 2rem;
+  text-align: center;
   font-size: 0.8rem;
 }
 
 /* ═══════════════════════════════════════════════════════ */
-/*  MOBILE BREAKPOINT  */
+/* MOBILE LAYOUT */
 /* ═══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* collapse grid so no phantom 300 px col remains */
   .grid {
     grid-template-columns: 1fr;
   }
@@ -200,6 +191,9 @@ nav a:hover::after {
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 100vh;
+    padding-bottom: 4rem; /* for toggle breathing room */
+    position: relative;
   }
 
   .mobile-grid .left {
@@ -218,23 +212,7 @@ nav a:hover::after {
   .mobile-grid .right {
     width: 100%;
     padding: 1rem;
-    overflow: visible; /* allow page scrolling */
+    overflow: visible;
   }
-
-  .mobile-grid {
-    min-height: 100vh; /* full height to anchor toggle at bottom */
-    position: relative;
-    padding-bottom: 4rem; /* space for toggle */
-  }
-  
-  .mobile-grid .theme-toggle {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 0.8rem;
-  }
-  
 }
 </style>
