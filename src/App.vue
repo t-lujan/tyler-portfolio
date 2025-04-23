@@ -1,7 +1,7 @@
 <template>
   <div :class="['app', isDark ? 'dark' : 'light']">
     <div :class="['grid', { 'mobile-grid': isMobile && route.name !== 'Home' }]">
-      <!-- LEFT SIDEBAR / HEADER -->
+      <!-- LEFT SIDE -->
       <div class="left">
         <h1>Tyler Lujan</h1>
         <p class="role">
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <!-- RIGHT CONTENT -->
+      <!-- RIGHT PANE -->
       <div class="right">
         <router-view />
       </div>
@@ -48,10 +48,10 @@ import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-
 const isDark = ref(false)
 const isHomePage = computed(() => route.name === 'Home')
 
+// Mobile detection
 const isMobile = ref(false)
 function checkMobile() {
   isMobile.value =
@@ -78,18 +78,15 @@ html, body {
   overflow-x: hidden;
 }
 
-/* WRAPPER */
+/* APP WRAPPER */
 .app {
   font-family: 'Helvetica Neue', sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* GRID */
+/* LAYOUT GRID */
 .grid {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -98,6 +95,7 @@ html, body {
   height: 100%;
   margin: 0 auto;
 }
+
 .left {
   display: flex;
   flex-direction: column;
@@ -109,6 +107,7 @@ html, body {
   position: relative;
   overflow: hidden;
   height: 100%;
+  padding: 2rem;
 }
 
 /* TYPOGRAPHY */
@@ -116,13 +115,11 @@ h1 {
   font-weight: 600;
   font-size: 2rem;
   margin-bottom: 0.2rem;
-  letter-spacing: -0.5px;
 }
 .role {
   font-weight: 300;
   font-size: 0.85rem;
-  color: #777;
-  letter-spacing: 0.3px;
+  color: inherit;
 }
 
 /* NAV */
@@ -139,7 +136,6 @@ nav a {
   font-weight: 500;
   color: inherit;
   position: relative;
-  transition: color 0.3s ease;
 }
 nav a::after {
   content: '';
@@ -155,7 +151,7 @@ nav a:hover::after {
   width: 100%;
 }
 
-/* THEME TOGGLE POSITIONS */
+/* TOGGLE POSITIONS */
 .theme-toggle.desktop-fixed {
   position: absolute;
   bottom: 2rem;
@@ -170,7 +166,6 @@ nav a:hover::after {
   .mobile-grid {
     display: flex;
     flex-direction: column;
-    width: 100%;
     min-height: 100vh;
     padding-bottom: 4rem;
     position: relative;
@@ -190,9 +185,7 @@ nav a:hover::after {
   }
 
   .mobile-grid .right {
-    width: 100%;
     padding: 1rem;
-    overflow: visible;
   }
 
   .theme-toggle.bottom-left {
@@ -210,18 +203,19 @@ nav a:hover::after {
   }
 }
 
-/* DARK THEME STYLES */
-.dark .app {
+/* THEME COLORS */
+.light {
+  background-color: #fff;
+  color: #111;
+}
+
+.dark {
   background-color: #111;
   color: #eee;
 }
 
-.dark .right {
-  background-color: #111;
-}
-
-.dark .left {
-  background-color: #111;
+.dark a {
+  color: #eee;
 }
 
 .dark input,
@@ -232,8 +226,7 @@ nav a:hover::after {
 }
 
 .dark .card {
-  background-color: #222;
+  background-color: #1a1a1a;
   color: #eee;
 }
-
 </style>
