@@ -84,13 +84,23 @@ body {
 /* ═══════════════════════════════════════════════════════ */
 .app {
   font-family: 'Helvetica Neue', sans-serif;
-  width: 100%;         /* avoid 100vw scrollbar gap */
+  width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: white;
+  color: black;
 }
+
+body.dark .app {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+
 
 /* ═══════════════════════════════════════════════════════ */
 /*  GRID LAYOUT  */
