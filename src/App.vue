@@ -1,5 +1,5 @@
 <template>
-  <div :class="themeClass" class="app">
+  <div :class="['app', isDark ? 'dark' : 'light']">
     <div :class="['grid', { 'mobile-grid': isMobile && route.name !== 'Home' }]">
       <!-- LEFT SIDEBAR / HEADER -->
       <div class="left">
@@ -17,26 +17,25 @@
           </ul>
         </nav>
 
-       <!-- THEME TOGGLE (works on desktop + mobile now) -->
-<div
-:class="[
-  'theme-toggle',
-  { 
-    'bottom-left': isMobile && isHomePage,
-    'bottom-flow': isMobile && !isHomePage,
-    'desktop-fixed': !isMobile
-  }
-]"
->
-<label>
-  <input type="checkbox" v-model="isDark" />
-  {{ isDark ? 'DARK' : 'LIGHT' }}
-</label>
-</div>
-
+        <!-- THEME TOGGLE -->
+        <div
+          :class="[
+            'theme-toggle',
+            {
+              'bottom-left': isMobile && isHomePage,
+              'bottom-flow': isMobile && !isHomePage,
+              'desktop-fixed': !isMobile
+            }
+          ]"
+        >
+          <label>
+            <input type="checkbox" v-model="isDark" />
+            {{ isDark ? 'DARK' : 'LIGHT' }}
+          </label>
+        </div>
       </div>
 
-      <!-- RIGHT CONTENT PANE -->
+      <!-- RIGHT CONTENT -->
       <div class="right">
         <router-view />
       </div>
@@ -50,14 +49,9 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-// Dark mode toggle
 const isDark = ref(false)
-const themeClass = computed(() => (isDark.value ? 'dark' : 'light'))
-watch(isDark, () => {
-  document.body.classList.toggle('dark', isDark.value)
-})
+const isHomePage = computed(() => route.name === 'Home')
 
-// Mobile detection
 const isMobile = ref(false)
 function checkMobile() {
   isMobile.value =
@@ -69,12 +63,10 @@ onMounted(() => {
   window.addEventListener('resize', checkMobile)
 })
 onBeforeUnmount(() => window.removeEventListener('resize', checkMobile))
-
-const isHomePage = computed(() => route.name === 'Home')
 </script>
 
-<style scoped>
-/* GLOBAL RESET */
+<style>
+/* RESET */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -86,6 +78,7 @@ html, body {
   overflow-x: hidden;
 }
 
+/* WRAPPER */
 .app {
   font-family: 'Helvetica Neue', sans-serif;
   height: 100vh;
@@ -96,7 +89,7 @@ html, body {
   align-items: center;
 }
 
-/* DESKTOP GRID */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -105,8 +98,6 @@ html, body {
   height: 100%;
   margin: 0 auto;
 }
-
-/* LEFT */
 .left {
   display: flex;
   flex-direction: column;
@@ -120,7 +111,7 @@ html, body {
   height: 100%;
 }
 
-/* TEXT */
+/* TYPOGRAPHY */
 h1 {
   font-weight: 600;
   font-size: 2rem;
@@ -164,7 +155,13 @@ nav a:hover::after {
   width: 100%;
 }
 
-/* MOBILE ONLY */
+/* THEME TOGGLE POSITIONS */
+.theme-toggle.desktop-fixed {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  font-size: 0.8rem;
+}
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -211,13 +208,15 @@ nav a:hover::after {
     text-align: center;
     font-size: 0.8rem;
   }
-  /* DESKTOP SIDEBAR TOGGLE */
-.theme-toggle.desktop-fixed {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
-  font-size: 0.8rem;
 }
 
+/* DARK THEME STYLES */
+.dark .app {
+  background-color: #111;
+  color: #eee;
+}
+
+.dark .right {
+  background-color: #1a1a1a;
 }
 </style>
