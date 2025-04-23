@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .contact-container {
   max-width: 600px;
   margin: 0 auto;

@@ -217,6 +217,23 @@ nav a:hover::after {
 }
 
 .dark .right {
-  background-color: #1a1a1a;
+  background-color: #111;
 }
+
+.dark .left {
+  background-color: #111;
+}
+
+.dark input,
+.dark textarea {
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #444;
+}
+
+.dark .card {
+  background-color: #222;
+  color: #eee;
+}
+
 </style>

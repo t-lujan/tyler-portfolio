@@ -145,7 +145,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style>
 .home {
   position: relative;
   width: 100%;

@@ -18,7 +18,7 @@
 // static content, no logic needed
 </script>
 
-<style scoped>
+<style>
 .projects-page {
   padding: 2rem 1rem;
   min-height: 100vh;
