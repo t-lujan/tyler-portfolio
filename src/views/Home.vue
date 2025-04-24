@@ -4,7 +4,7 @@
     <canvas v-if="!isMobile" ref="pongCanvas" class="pong-bg"></canvas>
 
     <!-- Desktop: Full about text -->
-    <div v-if="!isMobile" class="about">
+    <div v-if="!isMobile" class="about" :class="{ 'dark-text': isDark }">
       <p>
         I’m a junior dev focused on crafting clean, efficient, and interactive web experiences.
         My passion is building thoughtful UI/UX with Vue.js, JavaScript, and modern front-end tools.
@@ -33,9 +33,9 @@ const pongCanvas = ref(null)
 let ctx
 
 const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+const isDark = ref(false)
 const showAbout = ref(false)
 
-// Pong paddles and ball
 const paddle = {
   width: 10,
   height: 80,
@@ -85,9 +85,15 @@ const draw = () => {
   const canvas = pongCanvas.value
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-  const isDark = document.body.classList.contains('dark')
-  const color = isDark ? 'white' : 'black'
+  isDark.value = document.body.classList.contains('dark')
+  const color = isDark.value ? '#eee' : '#111'
+  const bg = isDark.value ? '#111' : '#fff'
 
+  // Background
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  // Move ball
   ball.x += ball.vx
   ball.y += ball.vy
 
@@ -120,6 +126,7 @@ const draw = () => {
   if (ball.y > aiCenter + 10) paddle.rightY += paddle.speed
   paddle.rightY = Math.max(0, Math.min(canvas.height - paddle.height, paddle.rightY))
 
+  // Draw paddles + ball
   ctx.fillStyle = color
   ctx.beginPath()
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
@@ -164,6 +171,11 @@ onMounted(() => {
   text-align: right;
   z-index: 2;
   line-height: 1.5;
+  color: #111;
+}
+
+.dark-text {
+  color: #eee;
 }
 
 .about-dot {
